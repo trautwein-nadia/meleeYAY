@@ -1,0 +1,241 @@
+#getScores
+Get reported scores from a domain
+https://melee121.pythonanywhere.com/melee/default/getScores?domain=a
+needed:
+domain=a
+
+#getPlayers
+Get list of players in domain besides yourself (according to userID)
+https://melee121.pythonanywhere.com/melee/default/getPlayers?domain=a&userID=0000&lat=56&lng=90
+needed:
+domain=a
+userID=0000
+lat=56
+lng=90
+
+#getTournaments
+Get domain list
+https://melee121.pythonanywhere.com/melee/default/getTournaments
+
+
+
+#addPlayer
+Add a player
+https://melee121.pythonanywhere.com/melee/default/addPlayer?tag=ham&userID=abcdefg&domain=a&lat=45&lng=56
+needed:
+tag=ham
+userID=abcdefg
+domain=a
+lat=45
+lng=56
+
+#addScore
+Report a match score
+https://melee121.pythonanywhere.com/melee/default/addScore?p1=ham&p1s=2&p2=spark&p2s=0&domain=a
+needed:
+p1=ham
+p1s=2
+p2=spark
+p2s=0
+domain=a
+
+#addTournament
+Add a TO/domain
+https://melee121.pythonanywhere.com/melee/default/addTournament?TO=Colin1&domain=a&lat=90&lng=54
+needed:
+TO=Colin1
+domain=a
+lat=90
+lng=54
+
+
+
+Secret function to delete entire server contents 
+https://melee121.pythonanywhere.com/melee/default/deleteAll?key=MeleeSecretKey420
+
+
+*******************************************************************************************************
+
+Tables:
+
+db.define_table('players',
+   Field('tag', required=True, requires=IS_NOT_EMPTY()),
+   Field('user_id', required=True, requires=IS_NOT_EMPTY()),
+   Field('domain', required=True, requires=IS_NOT_EMPTY()),
+   Field('lat', required=True, requires=IS_NOT_EMPTY()),
+   Field('lng', required=True, requires=IS_NOT_EMPTY()))
+
+db.define_table('tournaments',
+   Field('organizer', required=True, requires=IS_NOT_EMPTY()),
+   Field('domain', required=True, requires=IS_NOT_EMPTY()),
+   Field('lat', required=True, requires=IS_NOT_EMPTY()),
+   Field('lng', required=True, requires=IS_NOT_EMPTY()))
+
+db.define_table('results',
+   Field('p1', required=True, requires=IS_NOT_EMPTY()),
+   Field('p1score', required=True, requires=IS_NOT_EMPTY()),
+   Field('p2', required=True, requires=IS_NOT_EMPTY()),
+   Field('p2score', required=True, requires=IS_NOT_EMPTY()),
+   Field('domain', required=True, requires=IS_NOT_EMPTY()))
+
+#do I want these?
+db.players.tag.requires = IS_NOT_IN_DB(db, db.players.tag)
+db.tournaments.domain.requires = IS_NOT_IN_DB(db, db.tournaments.domain)
+
+Functions:
+
+def players():
+    player = db(db.players).select(orderby=db.players.tag)
+    return dict(players=player)
+
+def results():
+    scores = db(db.results).select(orderby=db.results.p1)
+    return dict(score=scores)
+
+def tournaments():
+    tournament = db(db.tournaments).select()
+    return dict(tournaments=tournament)
+
+def addPlayer():
+    tag_req = request.vars.tag
+    user_id_req = request.vars.userID
+    domain_req = request.vars.domain
+    lat_req = request.vars.lat
+    lng_req = request.vars.lng
+
+    if user_id_req is None or tag_req is None or lat_req is None or lng_req is None or domain_req is None:
+        raise HTTP(400, "Incomplete request.")
+
+    tagging_id = db.players.insert(user_id = user_id_req,
+                                   tag = tag_req, domain = domain_req,
+                                   lat = lat_req, lng = lng_req)
+
+    db.commit()
+    return dict(tag=tagging_id)
+
+def addScore():
+    p1 = request.vars.p1
+    p1S = request.vars.p1s
+    p2 = request.vars.p2
+    p2S = request.vars.p2s
+    domainr = request.vars.domain
+
+    if p1 is None or p1S is None or p2 is None or p2S is None or domainr is None:
+        raise HTTP(400, "Incomplete request.")
+
+    tagging_id = db.results.insert(p1 = p1, p1score = p1S,
+                                   p2 = p2, p2score = p2S, domain = domainr)
+
+    db.commit()
+    return dict(tag=tagging_id)
+
+
+def addTournament():
+    TO_req = request.vars.TO
+    domain_req = request.vars.domain
+    lat_req = request.vars.lat
+    lng_req = request.vars.lng
+
+    if TO_req is None or domain_req is None or lat_req is None or lng_req is None:
+        raise HTTP(400, "Incomplete request.")
+
+    tagging_id = db.tournaments.insert(organizer = TO_req, domain = domain_req,
+					lat = lat_req, lng = lng_req)
+
+    db.commit()
+    return dict(tag=tagging_id)
+
+
+#gets all players in domain that aren't the user (by userID)
+def getPlayers():
+    domain = request.vars.domain
+    userID = request.vars.userID
+    lat = 0#request.vars.lat #needed?
+    lng = 0#request.vars.lng #needed?
+
+    if lat is None or lng is None or domain is None or userID is None:
+        raise HTTP(400, "Incomplete request.")
+    try:
+        lat_f = float(lat)
+        lng_f = float(lng)
+    except ValueError:
+        raise HTTP(400, "Invalid request")
+
+	#make it so q is looking for lat,lng of certain radius 
+    q = (db.players.domain == domain) & (db.players.user_id != userID)
+    
+    rows = db(q).select()
+    rr = []
+    for el in rows:
+        rr.append({
+	    'tag': el.tag,
+            'userID': el.user_id,
+	    'domain': el.domain,
+            'lat': el.lat,
+            'lng': el.lng
+            })
+
+    return dict(tags=rr)
+
+
+def getTournaments():
+    #domain = request.vars.domain
+    lat = 0#request.vars.lat #needed?
+    lng = 0#request.vars.lng #needed?
+
+    if lat is None or lng is None:
+        raise HTTP(400, "Incomplete request.")
+    try:
+        lat_f = float(lat)
+        lng_f = float(lng)
+    except ValueError:
+        raise HTTP(400, "Invalid request")
+
+	#make it so q is looking for lat,lng of certain radius 
+   # q = (db.tournaments.domain == domain)
+    
+    rows = db(db.tournaments).select()
+    rr = []
+    for el in rows:
+        rr.append({
+	    'organizer': el.organizer,
+            'domain': el.domain,
+            'lat': el.lat,
+            'lng': el.lng
+            })
+
+    return dict(tags=rr)
+
+def getScores():
+    domain = request.vars.domain
+
+    if domain is None:
+        raise HTTP(400, "Incomplete request.")
+    
+    q = (db.results.domain == domain)
+    
+    rows = db(q).select()
+    rr = []
+    for el in rows:
+        rr.append({
+	    'player1': el.p1,
+            'score1': el.p1score,
+            'player2': el.p2,
+            'score2': el.p2score,
+	    'domain': el.domain
+            })
+
+    return dict(tags=rr)
+
+def deleteAll():
+	domain = request.vars.key
+
+   	if domain != "MeleeSecretKey420":
+        	raise HTTP(403, "Forbidden. YOu need the KEYooOOOOoo")
+    	if domain is None:
+        	raise HTTP(400, "Incomplete request.")
+
+	db.players.drop()
+	db.tournaments.drop()
+	db.results.drop()
+	return "success"

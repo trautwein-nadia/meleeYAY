@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tlogin_actionbar"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@color/lpurple">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:layout_below="@+id/tlogin_actionbar"
+    tools:context="com.meleeChat.MainActivity"
+    android:background="@color/lpurple">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/TO_prompt"
+        android:id="@+id/textView"
+        android:textColor="@color/silver"
+        android:layout_marginBottom="36dp"
+        android:layout_alignRight="@+id/username"
+        android:layout_alignEnd="@+id/username" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/username"
+        android:autoText="false"
+        android:hint="username"
+        android:textColor="@color/silver"
+        android:textColorHint="@color/silver"
+        android:textSize="20sp"
+        android:backgroundTint="@color/silver"
+        android:layout_below="@id/textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="false"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/key"
+        android:hint="API key"
+        android:textColorHint="@color/silver"
+        android:textColor="@color/silver"
+        android:backgroundTint="@color/silver"
+        android:layout_below="@id/username"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/to_domain"
+        android:hint="domain"
+        android:textColorHint="@color/silver"
+        android:textColor="@color/silver"
+        android:textSize="20sp"
+        android:backgroundTint="@color/silver"
+        android:layout_below="@id/key"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="35dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/start_chat"
+        android:onClick="toLogin"
+        android:enabled="true"
+        android:text="@string/login"
+        android:background="@color/green"
+        android:layout_below="@id/to_domain"
+        android:layout_alignParentStart="false"
+        android:layout_marginBottom="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/help_prompt"
+        android:id="@+id/textView2"
+        android:textColor="@color/silver"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/start_chat"
+        android:layout_marginBottom="15dp" />
+
+</RelativeLayout>
+</android.support.v7.widget.Toolbar>

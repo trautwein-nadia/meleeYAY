@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:padding="8dp"
+    android:background="@color/lpurple">
+
+    <TextView
+        android:layout_width="247dp"
+        android:layout_height="43dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/tag"
+        android:id="@+id/player_tag"
+        android:textColor="@color/silver"
+        android:textSize="20sp"
+        android:layout_weight="1.0" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
+        android:text="@string/alert"
+        android:id="@+id/alert_button"
+        android:onClick="alert"
+        android:background="@color/yellow" />
+</LinearLayout>
+
+

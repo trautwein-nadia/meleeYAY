@@ -1,0 +1,81 @@
+package com.meleeChat.data;
+
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Tournament {
+
+    public Integer id;
+    public String name;
+    public String url;
+    public String description;
+    public String tournamentType;
+    public String startedAt;
+    public Object completedAt;
+    public Boolean requireScoreAgreement;
+    public Boolean notifyUsersWhenMatchesOpen;
+    public String createdAt;
+    public String updatedAt;
+    public String state;
+    public Boolean openSignup;
+    public Boolean notifyUsersWhenTheTournamentEnds;
+    public Integer progressMeter;
+    public Boolean quickAdvance;
+    public Boolean holdThirdPlaceMatch;
+    public String ptsForGameWin;
+    public String ptsForGameTie;
+    public String ptsForMatchWin;
+    public String ptsForMatchTie;
+    public String ptsForBye;
+    public Integer swissRounds;
+    public Boolean _private;
+    public String rankedBy;
+    public Boolean showRounds;
+    public Boolean hideForum;
+    public Boolean sequentialPairings;
+    public Boolean acceptAttachments;
+    public String rrPtsForGameWin;
+    public String rrPtsForGameTie;
+    public String rrPtsForMatchWin;
+    public String rrPtsForMatchTie;
+    public Boolean createdByApi;
+    public Boolean creditCapped;
+    public Object category;
+    public Boolean hideSeeds;
+    public Integer predictionMethod;
+    public Object predictionsOpenedAt;
+    public Boolean anonymousVoting;
+    public Integer maxPredictionsPerUser;
+    public Object signupCap;
+    public Integer gameId;
+    public Integer participantsCount;
+    public Boolean groupStagesEnabled;
+    public Boolean allowParticipantMatchReporting;
+    public Boolean teams;
+    public Object checkInDuration;
+    public Object startAt;
+    public Object startedCheckingInAt;
+    public List<String> tieBreaks = new ArrayList<String>();
+    public Object lockedAt;
+    public Object eventId;
+    public Boolean publicPredictionsBeforeStartTime;
+    public Boolean ranked;
+    public String descriptionSource;
+    public String subdomain;
+    public String fullChallongeUrl;
+    public String liveImageUrl;
+    public Object signUpUrl;
+    public Boolean reviewBeforeFinalizing;
+    public Boolean acceptingPredictions;
+    public Boolean participantsLocked;
+    public String gameName;
+    public Boolean participantsSwappable;
+    public Boolean teamConvertable;
+    public Boolean groupStagesWereStarted;
+
+}

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MeleeMatchFinder</string>
+    <string name="refresh">refresh</string>
+
+    <string name="setup">Start an event</string>
+    <string name="guest">Competitor Login</string>
+    <string name="location">Please ensure your location settings are turned on</string>
+
+    <string name="TO_prompt">Please enter your Challonge credentials</string>
+    <string name="player_prompt">Please enter your tag for this tournament</string>
+    <string name="help_prompt">What are these things?</string>
+    <string name="login">login</string>
+
+    <string name="alertPlayers">Alert Players</string>
+    <string name="reportTO">Report results</string>
+    <string name="display">Display Bracket Info</string>
+    <string name="logout">Logout</string>
+
+    <string name="tag">tag</string>
+    <string name="alert">Alert</string>
+    <string name="getTournaments">Select Tournament</string>
+    <string name="tournamentName">tournament</string>
+    <string name="temp_tourn" />
+</resources>
