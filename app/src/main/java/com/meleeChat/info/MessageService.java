@@ -3,13 +3,17 @@ package com.meleeChat.info;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface MessageService {
         @GET("getTournaments")
-        Call<Brackets> get_brackets();
+        Call<Brackets> get_brackets(@Query("userID") String userID,
+                                    @Query("lat") float lat,
+                                    @Query("lng") float lng
+        );
 
-        @GET("addTournament")
+        @POST("addTournament")
         Call<Brackets> post_brackets(@Query("TO") String TO,
                                      @Query("domain") String domain,
                                      @Query("lat") float lat,
@@ -21,7 +25,7 @@ public interface MessageService {
                                   @Query("lat") float lat,
                                   @Query("lng") float lng);
 
-        @GET("addPlayer")
+        @POST("addPlayer")
         Call<Players> post_players(@Query("tag") String tag,
                                    @Query("userID") String user_id,
                                    @Query("domain") String domain,
@@ -31,7 +35,7 @@ public interface MessageService {
         @GET("getScores")
         Call<Scores> get_scores(@Query("domain") String domain);
 
-        @GET("addScore")
+        @POST("addScore")
         Call<Scores> post_scores(@Query("p1") String p1,
                                   @Query("p1s") String p1score,
                                   @Query("p2") String p2,
