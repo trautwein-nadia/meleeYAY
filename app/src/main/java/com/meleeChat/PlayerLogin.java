@@ -106,12 +106,15 @@ public class PlayerLogin extends AppCompatActivity {
                             Log.i(LOG_TAG, tag + " is ALLOWED and player is logging in again");
                             postMessage();
                             startMenu(); //tag was not taken
+                        }
+                        else {
+                            Log.i(LOG_TAG, "tag taken?");
 
+                            tagTaken();
+                            return;
                         }
                     }
                 }
-                tagTaken();
-                return;
             }
             else {
                 Log.i(LOG_TAG, tag + " is ALLOWED and was not perviously set");
