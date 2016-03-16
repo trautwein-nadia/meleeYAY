@@ -18,7 +18,8 @@
 
         <activity android:name="com.meleeChat.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustPan">
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:launchMode="singleTask" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

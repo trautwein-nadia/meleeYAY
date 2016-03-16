@@ -44,5 +44,16 @@
             android:background="@color/green"
             android:layout_marginBottom="10dp" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/logout"
+            android:id="@+id/logout"
+            android:onClick="logout"
+            android:layout_weight=".1"
+            android:background="@color/silver"
+            android:layout_marginBottom="10dp"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 </RelativeLayout>

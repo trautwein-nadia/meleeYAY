@@ -80,6 +80,7 @@ public class TOLogin extends AppCompatActivity {
             b.putFloat("LAT", lat);
             b.putFloat("LON", lon);
             b.putString("DOMAIN", domain);
+            b.putBoolean("isTO", true);
             intent.putExtras(b);
 
             startActivity(intent);

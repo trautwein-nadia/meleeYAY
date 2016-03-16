@@ -86,6 +86,8 @@ public class PlayerLogin extends AppCompatActivity {
         b.putFloat("LAT", lat);
         b.putFloat("LON", lon);
         b.putString("DOMAIN", domain);
+        b.putString("TAG", username);
+        b.putString("ID", user_id);
         intent.putExtras(b);
 
         startActivity(intent);

@@ -15,6 +15,8 @@ public interface MessageService {
                                      @Query("domain") String domain,
                                      @Query("lat") float lat,
                                      @Query("lng") float lng);
+        @POST("finishTournament")
+        Call<Brackets> finish_tournament(@Query("domain") String domain);
 
         @GET("getPlayers")
         Call<Players> get_players(@Query("domain") String domain,
@@ -28,6 +30,11 @@ public interface MessageService {
                                    @Query("domain") String domain,
                                    @Query("lat") float lat,
                                    @Query("lng") float lng);
+
+        @POST("logoutPlayer")
+        Call<Players> logout_player(@Query("tag") String tag,
+                                   @Query("userID") String user_id,
+                                   @Query("domain") String domain);
 
         @GET("getScores")
         Call<Scores> get_scores(@Query("domain") String domain);
