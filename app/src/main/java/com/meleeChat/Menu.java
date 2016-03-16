@@ -65,11 +65,13 @@ public class Menu extends AppCompatActivity{
                         dialog.dismiss();
                     }
                 })
-                .setNegativeButton("Fuck you",new DialogInterface.OnClickListener() {
+                /*
+                .setNegativeButton("cancel",new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
                         dialog.cancel();
                     }
-                });
+                })*/;
+
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
         Log.i(LOG_TAG, "NOTHINGGG2");
@@ -87,9 +89,12 @@ public class Menu extends AppCompatActivity{
         b = getIntent().getExtras(); //get lat an lon to pass to other activities
 
     }
+
+    /*
     @Override
     public void onBackPressed() {
     }
+    */
 
 
     protected Vibrator vib;

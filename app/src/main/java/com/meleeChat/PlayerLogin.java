@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,8 +22,6 @@ import android.os.Vibrator;
 import com.meleeChat.info.MessageService;
 import com.meleeChat.info.Brackets;
 import com.meleeChat.info.Players;
-import com.meleeChat.info.SecureRandomString;
-import com.meleeChat.data.GetBracket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +42,10 @@ public class PlayerLogin extends AppCompatActivity {
     private float lon;
     private String tag;
     private String domain;
-    private String oldID;
     private SharedPreferences settings;
-    private List<Players.Player> responses;
-    private List<Brackets.Bracket> bracket_responses;
-    private boolean allowed = false;
-    private List<String> domains;
-    private List<String> tournaments;
+    private List<Players.Player> tagList;
+    private List<Brackets.Bracket> domainList;
+    private ArrayList<String> tournaments;
     private ListView tournamentList;
     private String username;
     final Context context = this;
@@ -75,91 +70,79 @@ public class PlayerLogin extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.username);
         username = editText.getText().toString();
 
-
+        TextView t = (TextView) findViewById(R.id.tournamentName);
+        domain = t.getText().toString();
+        getPlayers(); //here for now...
         if (username.equals("")) {
             return false;
         }
         return true;
     }
 
+    private void startMenu() {
+        Intent intent = new Intent(this, Menu.class);
+
+        Bundle b = new Bundle();
+        b.putFloat("LAT", lat);
+        b.putFloat("LON", lon);
+        b.putString("DOMAIN", domain);
+        intent.putExtras(b);
+
+        startActivity(intent);
+    }
+
     public void playerLogin(View v) {
-        username = settings.getString("username", null);
-        if (username != null) {
-            //parse responses so that username isnt taken
-            for (int i = (responses.size() - 1); i >= 0; i--) {
-                tag = responses.get(i).tag;
-                domain = responses.get(i).domain;
-                oldID = responses.get(i).userID;
-                Log.i(LOG_TAG, "tag list: " + tag);
-                if (tag.equals(username)) {
-                    //add message
-                    if (user_id.equals(oldID)) {
-                        Log.i(LOG_TAG, tag + " is ALLOWED :3");
-                        postMessage();
-                        Intent intent = new Intent(this, Menu.class);
+        if (getLoginInfo()) {
+            if (tagList != null) {
+                //parse responses so that username isnt taken
+                for (int i = (tagList.size() - 1); i >= 0; i--) {
+                    tag = tagList.get(i).tag;
+                    domain = tagList.get(i).domain;
+                    String oldID = tagList.get(i).userID;
+                    Log.i(LOG_TAG, "tag list: " + tag);
+                    if (tag.equals(username)) {
+                        //add message
+                        if (user_id.equals(oldID)) {
+                            Log.i(LOG_TAG, tag + " is ALLOWED and player is logging in again");
+                            postMessage();
+                            startMenu(); //tag was not taken
 
-                        Bundle b = new Bundle();
-                        b.putFloat("LAT", lat);
-                        b.putFloat("LON", lon);
-                        b.putString("DOMAIN", domain);
-                        intent.putExtras(b);
-
-                        startActivity(intent);
+                        }
                     }
-                    else {
-                        vibrateCheck();
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                                context);
-
-                        // set title
-                        alertDialogBuilder.setTitle("Tag already taken!");
-
-                        // set dialog message
-                        alertDialogBuilder
-                                .setMessage("Please enter a new Tag")
-                                .setCancelable(false)
-                                .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        dialog.cancel();
-                                    }
-                                })
-                                .setNegativeButton("Fuck you",new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog,int id) {
-                                        // if this button is clicked, just close
-                                        // the dialog box and do nothing
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-
-                        // show it
-                        alertDialog.show();
-
-                        Log.i(LOG_TAG, tag + " is already taken!");
-                        return;
-                    }
-                    }
-                else {
-                    Log.i(LOG_TAG, tag + " is ALLOWED :3");
-                    postMessage();
-                    Intent intent = new Intent(this, Menu.class);
-
-                    Bundle b = new Bundle();
-                    b.putFloat("LAT", lat);
-                    b.putFloat("LON", lon);
-                    b.putString("DOMAIN", domain);
-                    intent.putExtras(b);
-
-                    startActivity(intent);
                 }
-                }
+                tagTaken();
+                return;
             }
-
+            else {
+                Log.i(LOG_TAG, tag + " is ALLOWED and was not perviously set");
+                postMessage();
+                startMenu();
+            }
         }
+    }
+
+    public void tagTaken(){
+            vibrateCheck();
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+            // set title
+            alertDialogBuilder.setTitle("Tag already taken!");
+            // set dialog message
+            alertDialogBuilder
+            .setMessage("Please enter a new Tag")
+            .setCancelable(false)
+            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // if this button is clicked, close
+                    // current activity
+                    dialog.cancel();
+                }
+            });
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
+                    Log.i(LOG_TAG, tag + " is already taken!");
+    }
 
     public void postMessage() {
         //Magic HTTP stuff
@@ -170,7 +153,7 @@ public class PlayerLogin extends AppCompatActivity {
                 .addInterceptor(logging)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://luca-teaching.appspot.com/localmessages/default/")
+                .baseUrl("https://melee121.pythonanywhere.com/melee/default/")
                 .addConverterFactory(GsonConverterFactory.create())    //parse Gson string
                 .client(httpClient)    //add logging
                 .build();
@@ -180,17 +163,12 @@ public class PlayerLogin extends AppCompatActivity {
         Call<Players> queryResponseCall =
                 service.post_players(username, user_id, domain, lat, lon);
 
-
-        //Call retrofit asynchronously
         queryResponseCall.enqueue(new Callback<Players>() {
             @Override
             public void onResponse(Response<Players> response) {
-                Log.i(LOG_TAG, "Code is: " + response.code());
+                Log.i(LOG_TAG, "postMesasge code is: " + response.code());
                 if (response.code() == 200) {
-                    Log.i(LOG_TAG, "The result is: " + response.body().players);
-
-                    responses = response.body().players;
-
+                    //Log.i(LOG_TAG, "The result is: " + response.body().players);
                 }
                 else {
                     Log.i(LOG_TAG, "Code is: " + response.code());
@@ -206,7 +184,7 @@ public class PlayerLogin extends AppCompatActivity {
         });
     }
 
-    public void getMessages() {
+    public void getPlayers() {
         //Magic HTTP stuff
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -215,32 +193,25 @@ public class PlayerLogin extends AppCompatActivity {
                 .addInterceptor(logging)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://luca-teaching.appspot.com/localmessages/default/")
+                .baseUrl("https://melee121.pythonanywhere.com/melee/default/")
                 .addConverterFactory(GsonConverterFactory.create())    //parse Gson string
                 .client(httpClient)    //add logging
                 .build();
 
         MessageService service = retrofit.create(MessageService.class);
 
-            SecureRandomString srs = new SecureRandomString();
-            String user_id = srs.nextString();
+        Call<Players> queryResponseCall = service.get_players(domain, user_id, lat, lon);
 
-        Call<Players> queryResponseCall =
-                service.get_players(domain, user_id, lat, lon);
-
-
-            //Call retrofit asynchronously
             queryResponseCall.enqueue(new Callback<Players>() {
                 @Override
                 public void onResponse(Response<Players> response) {
-                    Log.i(LOG_TAG, "Code is: " + response.code());
+                    Log.i(LOG_TAG, "getPlayers code is: " + response.code());
                     if (response.code() == 200) {
                         Log.i(LOG_TAG, "The result is: " + response.body().players);
 
-                        responses = response.body().players;
+                        tagList = response.body().players;
 
-                    }
-                    else {
+                    } else {
                         Log.i(LOG_TAG, "Code is: " + response.code());
                         //toast with error
                     }
@@ -257,7 +228,7 @@ public class PlayerLogin extends AppCompatActivity {
     @Override
     protected void onResume() {
         getSupportActionBar().setTitle("Competitor Login");
-        getMessages();
+        getDomains();
         super.onResume();
     }
 
@@ -275,7 +246,6 @@ public class PlayerLogin extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         lat = b.getFloat("LAT");
         lon = b.getFloat("LON");
-        b.putString("domain", domain);
         settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         user_id = settings.getString("user_id", user_id);
 
@@ -283,7 +253,7 @@ public class PlayerLogin extends AppCompatActivity {
         Log.i(LOG_TAG, "LAT: " + lat + " LON: " + lon + " user_id: " + user_id);
     }
 
-    public void getTournaments(View view) {
+    private void getDomains() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -291,57 +261,44 @@ public class PlayerLogin extends AppCompatActivity {
                 .addInterceptor(logging)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://luca-teaching.appspot.com/localmessages/default/")
+                .baseUrl("https://melee121.pythonanywhere.com/melee/default/")
                 .addConverterFactory(GsonConverterFactory.create())    //parse Gson string
                 .client(httpClient)    //add logging
                 .build();
 
         MessageService service = retrofit.create(MessageService.class);
 
-        Call<Players> queryResponseCall =
-                service.get_players(domain, user_id, lat, lon);
+        Call<Brackets> queryResponseCall =
+                service.get_brackets();
 
-
-        //Call retrofit asynchronously
-        queryResponseCall.enqueue(new Callback<Players>() {
+        queryResponseCall.enqueue(new Callback<Brackets>() {
             @Override
-            public void onResponse(Response<Players> response) {
-                Log.i(LOG_TAG, "Code is: " + response.code());
+            public void onResponse(Response<Brackets> response) {
+                Log.i(LOG_TAG, "getDomains code is: " + response.code());
                 if (response.code() == 200) {
-                    Log.i(LOG_TAG, "The result is: " + response.body().players);
-
-                    responses = response.body().players;
-                    for (int i = (responses.size() - 1); i >= 0; i--) {
-                        if (!domains.contains(domain)) {
-                            try {
-                                tournaments.addAll(new GetBracket().execute("FlyxNHAwJNMvcoibWQvxIp4jaFcu28tIgh0eUQak", domain).get());
-                                System.out.println(tournaments);
-                            } catch (java.util.concurrent.ExecutionException e) {
-                                tournaments = null;
-                            } catch (java.lang.InterruptedException e) {
-                                tournaments = null;
-                            } catch (java.lang.NullPointerException e) {
-                                // Nothing
-                            }
-                            domains.add(responses.get(i).domain);
-                        }
+                    //Log.i(LOG_TAG, "The result is: " + response.body().brackets);
+                    domainList = response.body().brackets;
+                    tournaments = new ArrayList<String>();
+                    for (int i = (domainList.size() - 1); i >= 0; i--) {
+                        tournaments.add(response.body().brackets.get(i).domain);
                     }
-
-
+                    getTournaments();
                 }
                 else {
                     Log.i(LOG_TAG, "Code is: " + response.code());
-                    //toast with error
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
                 // Log error here since request failed
-                //toast error
             }
         });
+    }
+
+    public void getTournaments() {
         tournamentList = (ListView) findViewById(R.id.tournamentList);
+
         if (tournaments != null) {
             ArrayAdapter<String> adapter;
             adapter = new ArrayAdapter<String>(this,

@@ -8,10 +8,7 @@ import retrofit2.http.Query;
 
 public interface MessageService {
         @GET("getTournaments")
-        Call<Brackets> get_brackets(@Query("userID") String userID,
-                                    @Query("lat") float lat,
-                                    @Query("lng") float lng
-        );
+        Call<Brackets> get_brackets();
 
         @POST("addTournament")
         Call<Brackets> post_brackets(@Query("TO") String TO,

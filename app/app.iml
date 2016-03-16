@@ -113,9 +113,9 @@
     <orderEntry type="library" exported="" name="play-services-location-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-client-jvm-2.5.1" level="project" />
     <orderEntry type="library" exported="" name="retrofit-2.0.0-beta3" level="project" />
+    <orderEntry type="library" exported="" name="converter-gson-2.0.0-beta3" level="project" />
     <orderEntry type="library" exported="" name="tubesock-0.0.12" level="project" />
     <orderEntry type="library" exported="" name="logging-interceptor-3.0.0-RC1" level="project" />
-    <orderEntry type="library" exported="" name="converter-gson-2.0.0-beta3" level="project" />
     <orderEntry type="library" exported="" name="play-services-appindexing-7.0.0" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-2.2.2" level="project" />
     <orderEntry type="library" exported="" name="jackson-databind-2.2.2" level="project" />

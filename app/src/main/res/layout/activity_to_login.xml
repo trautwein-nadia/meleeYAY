@@ -24,7 +24,6 @@
         android:id="@+id/textView"
         android:textColor="@color/silver"
         android:layout_marginBottom="36dp"
-        android:layout_alignRight="@+id/username"
         android:layout_alignEnd="@+id/username" />
 
     <EditText
@@ -36,7 +35,7 @@
         android:autoText="false"
         android:hint="username"
         android:textColor="@color/silver"
-        android:textColorHint="@color/silver"
+        android:textColorHint="@color/hint"
         android:textSize="20sp"
         android:backgroundTint="@color/silver"
         android:layout_below="@id/textView"
@@ -51,7 +50,7 @@
         android:ems="10"
         android:id="@+id/key"
         android:hint="API key"
-        android:textColorHint="@color/silver"
+        android:textColorHint="@color/hint"
         android:textColor="@color/silver"
         android:backgroundTint="@color/silver"
         android:layout_below="@id/username"
@@ -65,7 +64,7 @@
         android:ems="10"
         android:id="@+id/to_domain"
         android:hint="domain"
-        android:textColorHint="@color/silver"
+        android:textColorHint="@color/hint"
         android:textColor="@color/silver"
         android:textSize="20sp"
         android:backgroundTint="@color/silver"
@@ -95,7 +94,8 @@
         android:textColor="@color/silver"
         android:layout_alignParentBottom="true"
         android:layout_below="@id/start_chat"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginBottom="15dp"
+        android:textColorHint="@color/hint" />
 
 </RelativeLayout>
 </android.support.v7.widget.Toolbar>

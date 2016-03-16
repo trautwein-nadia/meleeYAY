@@ -44,7 +44,8 @@
         android:layout_below="@+id/username"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="@string/tournamentName" />
+        android:text="@string/tournamentName"
+        android:textSize="20sp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,23 +57,13 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="24dp" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/getTournaments"
-        android:id="@+id/tournamentButton"
-        android:onClick="getTournaments"
-        android:layout_below="@+id/tournamentName"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"/>
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tournamentList"
-        android:layout_below="@+id/tournamentButton"
         android:layout_alignRight="@+id/start_chat"
-        android:layout_above="@id/start_chat"/>
+        android:layout_above="@id/start_chat"
+        android:layout_below="@+id/tournamentName" />
 
     <Button
         android:layout_width="wrap_content"

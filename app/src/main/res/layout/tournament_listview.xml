@@ -9,5 +9,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/temp_tourn"
         android:id="@+id/textView5"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/silver" />
 </LinearLayout>

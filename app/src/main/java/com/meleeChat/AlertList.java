@@ -129,7 +129,7 @@ public class AlertList extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         lat = b.getFloat("LAT");
         lon = b.getFloat("LON");
-        domain = b.getString("domain", domain);
+        domain = b.getString("DOMAIN", domain);
 
 
         refresh(findViewById(R.id.chat));
